@@ -1,0 +1,10 @@
+# 编辑器配置
+.vscode/
+.idea/
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# 依赖目录(以后做Node项目时用)
+node_modules/

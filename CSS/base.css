@@ -1,0 +1,759 @@
+/* =========================================================
+ * base.css - 精简版通用基础样式（类 normalize + reset 实用组合）
+ * 说明：
+ *   1. 统一各大浏览器的默认样式差异（normalize 的作用）
+ *   2. 去掉开发中常见的默认 margin/padding 等"坑"（reset 的作用）
+ *   3. 只保留最常用、最稳妥的规则，约 100 行，适合所有项目直接引入
+ *   4. 兼容 PC 与移动端
+ * 使用方法：在 <head> 里写 <link rel="stylesheet" href="base.css">
+ * ========================================================= */
+
+
+/* ---------- 1. 文档根与盒模型（最核心，必写） ---------- */
+
+/* :root 等价于 html，权重更高；用来定义全局 CSS 变量与根字号 */
+:root {
+  font-size: 16px;
+  /* 根字号基准：1rem = 16px，移动端响应式改这里即可 */
+  line-height: 1.5;
+  /* 全局行高 1.5，阅读舒适 */
+  -webkit-text-size-adjust: 100%;
+  /* 禁止 iOS 横屏时自动放大文字 */
+  -webkit-tap-highlight-color: transparent;
+  /* 移动端点击去掉蓝色高亮背景 */
+  color-scheme: light dark;
+  /* 告诉浏览器同时支持浅色/深色模式，表单控件会自动适配 */
+}
+
+/* * 通配符选择器：所有元素统一 box-sizing，保证 width=内容+内边距+边框，不再算错宽 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* 盒模型改为 border-box：padding、border 不会把盒子撑大（★★★★★） */
+  margin: 0;
+  /* 清掉所有元素的默认外边距，避免 h1/p/body 自带的 margin 影响布局 */
+  padding: 0;
+  /* 清掉所有元素的默认内边距，避免 ul/ol/input 自带 padding */
+}
+
+/* ---------- 2. body 与页面整体 ---------- */
+
+body {
+  min-height: 100vh;
+  /* 页面最小高度 = 整个视口高度，避免内容少时页面"短一截" */
+  /* —— 字体栈顺序说明（兼顾「显示效果」和「商用安全」）：
+   * 1) 系统原生字体：Apple/Android/Windows 用户本地自带，用用户系统授权显示，不涉及分发
+   * 2) 大厂免费商用字体兜底：如果用户系统装过 MiSans / 思源黑体等，优先用这些 100% 免费商用的
+   * 3) 微软雅黑放到偏后面：仅作为 Windows 访问者"系统自带"的显示备选（不嵌入字体文件，不主动分发）
+   * 4) 最后 sans-serif 是浏览器底线，保证任何环境都有中文字体显示
+   */
+  font-family:
+    -apple-system,
+    /* macOS/iOS Safari 系统默认（苹方/旧金山，苹果系统授权显示） */
+    BlinkMacSystemFont,
+    /* macOS Chrome/Firefox 系统默认 */
+    "Segoe UI",
+    /* Windows 英文默认 UI 字体 */
+    Roboto,
+    /* Android/ChromeOS 默认字体 */
+    "PingFang SC",
+    /* macOS/iOS 中文默认（苹方，苹果系统授权显示） */
+    "HarmonyOS Sans SC",
+    /* 华为鸿蒙免费商用字体（用户装过即生效） */
+    "MiSans",
+    /* 小米 MiSans，全球免费商用，10 个字重（用户装过即生效） */
+    "Alibaba PuHuiTi",
+    /* 阿里巴巴普惠体，永久免费商用（用户装过即生效） */
+    "Source Han Sans SC",
+    /* 思源黑体，Adobe+Google 发布，SIL OFL 100% 免费商用（用户装过即生效） */
+    "Noto Sans CJK SC",
+    /* 思源黑体的 Google 发行版，同上 */
+    "Microsoft YaHei",
+    /* 微软雅黑（放最后，仅依赖 Windows 访问者系统自带显示，不打包不分发） */
+    "Helvetica Neue", Helvetica, Arial,
+    /* 经典英文无衬线，跨平台通用 */
+    sans-serif;
+  /* 最终兜底：浏览器默认无衬线字体，保证任何环境都能正常显示 */
+  font-size: 1rem;
+  /* 默认字号 = 16px，用 rem 方便整体缩放 */
+  color: #333;
+  /* 默认文字颜色：不是纯黑，久看不累 */
+  background-color: #fff;
+  /* 默认背景白，防止少数浏览器灰底 */
+  -webkit-font-smoothing: antialiased;
+  /* Chrome 等 WebKit 浏览器开启抗锯齿，字更清晰 */
+  -moz-osx-font-smoothing: grayscale;
+  /* macOS Firefox 抗锯齿 */
+  text-rendering: optimizeLegibility;
+  /* 提升文字渲染质量，字间距更匀称 */
+}
+
+/* ---------- 3. 常用块级元素 ---------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  /* 标题统一加粗 600（比 700 粗体更柔和） */
+  font-size: inherit;
+  /* 继承父级字号，具体页面自己再定 h1~h6 大小 */
+  line-height: 1.3;
+  /* 标题行高比正文略小，紧凑好看 */
+}
+
+p {
+  line-height: 1.7;
+  /* 段落行高稍大，阅读不拥挤 */
+  word-wrap: break-word;
+  /* 长单词/长链接自动换行，不会撑破容器 */
+  overflow-wrap: break-word;
+  /* 同上，新标准写法，双保险 */
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+  /* 去掉列表默认的小圆点/序号，项目里用的话自己再加类 */
+}
+
+a {
+  text-decoration: none;
+  /* 去掉链接默认下划线，项目中按需重加 */
+  color: inherit;
+  /* 链接颜色继承父级，不会强制蓝色更易控制 */
+  background-color: transparent;
+  /* 老 IE 给链接加背景，这里清零 */
+  transition: color 0.2s ease;
+  /* 颜色变化加过渡，hover 不生硬 */
+}
+
+a:hover {
+  text-decoration: underline;
+  /* 鼠标悬停时才显示下划线，符合视觉预期 */
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  /* 图片默认是 inline，会多出 3px 基线空白，改 block 消除 */
+  max-width: 100%;
+  /* 最大宽度不超过父容器，自适应，不会撑破布局 */
+  height: auto;
+  /* 高度随宽度自动算，保证图片不变形 */
+}
+
+/* ---------- 4. 表单元素（浏览器差异最大的部分） ---------- */
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  /* 继承 body 字体，否则默认是系统等宽字体很丑 */
+  font-size: inherit;
+  /* 字号继承，避免 select/textarea 小一号 */
+  color: inherit;
+  /* 文字颜色继承 */
+  background: none;
+  /* 去掉默认背景色，尤其 iOS 按钮/input 有灰底 */
+  border: none;
+  /* 去掉默认边框，需要时自行添加 */
+  outline: none;
+  /* 去掉默认 focus 时的蓝色外框，统一用 :focus-visible 重写 */
+}
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  cursor: pointer;
+  /* 鼠标悬停变成手型，提示用户可点击 */
+  -webkit-appearance: none;
+  /* iOS 去掉按钮自带圆角和渐变 */
+  appearance: none;
+  /* 标准写法，去默认外观 */
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  /* 禁用状态鼠标变禁止图标 */
+  opacity: 0.6;
+  /* 禁用时半透明，视觉提示不可点 */
+}
+
+textarea {
+  resize: vertical;
+  /* 只允许垂直方向拖动大小，横向拖容易破坏布局 */
+  min-height: 80px;
+  /* 最小高度，避免太矮看不到内容 */
+}
+
+/* ★iPhone/iPad 输入框聚焦不放大：字号必须 ≥ 16px，否则 Safari 会自动放大页面
+   —— 移动端(<768px)强制 16px，电脑端可继承更小字号（14px/15px 常见后台系统） */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+    /* !important 防止行内 style 或组件样式覆盖导致放大 */
+  }
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #bbb;
+  /* 占位符文字颜色浅一些，与输入内容区分 */
+  font-weight: 400;
+  /* 占位符不加粗 */
+}
+
+/* ---------- 5. 表格 ---------- */
+
+table {
+  border-collapse: collapse;
+  /* 合并相邻边框，不会出现双线 */
+  border-spacing: 0;
+  /* 单元格间距为 0 */
+  width: 100%;
+  /* 默认占满父容器宽度 */
+}
+
+th,
+td {
+  text-align: left;
+  /* 默认左对齐，原浏览器是 th 居中，不符合国内习惯 */
+  padding: 8px 12px;
+  /* 给单元格默认内边距，内容不贴边 */
+  border-bottom: 1px solid #eee;
+  /* 每行底部一条浅灰分隔线，简单好看 */
+  vertical-align: middle;
+  /* 垂直居中 */
+}
+
+/* ---------- 6. 代码与键盘 ---------- */
+
+code,
+pre,
+kbd,
+samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  /* 等宽字体栈 */
+  font-size: 0.9em;
+  /* 代码字号略小一号，与正文区分 */
+}
+
+pre {
+  padding: 12px 16px;
+  /* 代码块内边距 */
+  background: #f6f8fa;
+  /* 代码块浅灰底 */
+  border-radius: 4px;
+  /* 圆角 */
+  overflow-x: auto;
+  /* 超出宽度横向滚动，不会换行破坏代码格式 */
+  white-space: pre;
+  /* 保留空格与换行，必须 */
+}
+
+code {
+  padding: 2px 6px;
+  /* 行内代码一点点内边距 */
+  background: #f0f0f0;
+  /* 行内代码灰色背景 */
+  border-radius: 3px;
+  /* 小圆角 */
+}
+
+/* ---------- 7. 水平线、引用 ---------- */
+
+hr {
+  border: none;
+  /* 去掉默认 3D 边框 */
+  border-top: 1px solid #e5e5e5;
+  /* 换成一条细灰线 */
+  margin: 20px 0;
+  /* 上下留出间距 */
+}
+
+blockquote {
+  padding: 8px 16px;
+  /* 引用块内边距 */
+  margin: 12px 0;
+  /* 引用块外边距 */
+  border-left: 4px solid #409eff;
+  /* 左侧一条蓝色竖条，常见引用样式 */
+  background: #f4f8fc;
+  /* 浅蓝背景 */
+  color: #606266;
+  /* 文字颜色稍淡 */
+}
+
+/* ---------- 8. 无障碍与交互优化（8-1） / 工具类（8-2） ---------- */
+
+/* 8-1. 屏幕阅读器专用：给视障用户读，正常人看不见
+   用法：<button aria-label="关闭"><i class="icon-close"></i><span class="sr-only">关闭</span></button> */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 减少动画模式：用户在系统设置里勾选了「减少动画」时，取消 transition/animation
+   —— 避免头晕/癫痫，也是无障碍标准之一（WCAG 2.1） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 点击获取焦点时的统一轮廓样式（比浏览器默认蓝框好看，无障碍友好） */
+:focus-visible {
+  outline: 2px solid #409eff;
+  /* 2 像素蓝色实线外框 */
+  outline-offset: 2px;
+  /* 外框与元素之间留 2px 空隙，更清晰 */
+  border-radius: 2px;
+  /* 外框圆角 */
+}
+
+/* 8-2. 清除浮动：子元素全浮动时父级高度不会塌陷，给父级加这个类即可 */
+.clearfix::after {
+  content: "";
+  /* 伪元素必须有 content 才会渲染 */
+  display: block;
+  /* 转成块级元素 */
+  clear: both;
+  /* 清除左右浮动 */
+  height: 0;
+  /* 不占高度 */
+  visibility: hidden;
+  /* 不可见 */
+}
+
+/* 单行文字溢出显示省略号：给固定宽度的文字块加 .ellipsis */
+.ellipsis {
+  overflow: hidden;
+  /* 超出隐藏 */
+  white-space: nowrap;
+  /* 强制不换行 */
+  text-overflow: ellipsis;
+  /* 末尾显示 ... */
+}
+
+/* 多行文字溢出显示省略号（-webkit-line-clamp: 后面数字是行数，可改 2/3/4 等） */
+.ellipsis-2 {
+  overflow: hidden;
+  /* 超出隐藏 */
+  display: -webkit-box;
+  /* 弹性盒老语法，webkit 系必需 */
+  -webkit-line-clamp: 2;
+  /* 最多显示 2 行（带 webkit 前缀，Chrome/Safari/iOS 支持） */
+  line-clamp: 2;
+  /* 标准属性，兼容新版浏览器（避免编辑器警告：建议同时声明标准属性） */
+  -webkit-box-orient: vertical;
+  /* 盒子垂直方向排列 */
+  text-overflow: ellipsis;
+  /* 末尾显示 ... */
+}
+
+/* 禁止选中文字：用于按钮、标题、验证码等不想被用户拖选的地方 */
+.no-select {
+  -webkit-user-select: none;
+  /* Chrome/Safari/iOS */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE10+/Edge */
+  user-select: none;
+  /* 标准写法 */
+}
+
+/* 全屏占满容器：写遮罩层 / loading 时直接用 .full-fill */
+.full-fill {
+  position: absolute;
+  /* 绝对定位，父级要有 relative */
+  top: 0;
+  /* 贴顶 */
+  right: 0;
+  /* 贴右 */
+  bottom: 0;
+  /* 贴底 */
+  left: 0;
+  /* 贴左 */
+  width: 100%;
+  /* 宽度满 */
+  height: 100%;
+  /* 高度满 */
+}
+
+/* ---------- 9. 响应式布局工具类（防乱布局必备，按需使用） ---------- */
+
+/* 万能容器：小屏占满，大屏居中限宽，所有页面内容都放这里面 */
+.container {
+  width: 100%;
+  /* 小屏占满整个屏幕 */
+  max-width: 1200px;
+  /* 大屏最多 1200px，不会太宽 */
+  margin: 0 auto;
+  /* 左右自动居中 */
+  padding: 0 1rem;
+  /* 左右留 16px 间距，内容不贴边 */
+}
+
+/* 小容器：表单页、登录页等更窄的区域（约 720px） */
+.container-sm {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 中等容器：详情页、文章页（约 960px） */
+.container-md {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 大容器：后台管理、数据大屏（约 1440px） */
+.container-lg {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 自动响应式网格：屏幕宽多显示几列，窄就少显示，不用写媒体查询 */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  /* ★核心：每列最小 250px，最大平均分配；auto-fit 自动填充列数 */
+  gap: 1rem;
+  /* 卡片间距 16px */
+}
+
+/* 防挤爆 Flex：内容多时自动换行，不会溢出 */
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  /* ★允许换行，装不下就换到下一行 */
+  gap: 1rem;
+  /* 用 gap 代替 margin，间距均匀 */
+  align-items: center;
+  /* 垂直居中 */
+}
+
+/* 响应式字号：随屏幕宽度自动缩放，但有上下限 */
+.responsive-title {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  /* 最小 24px，首选 5%视口宽，最大 48px（大标题用） */
+  line-height: 1.3;
+  /* 标题行高略小更紧凑 */
+}
+
+.responsive-subtitle {
+  font-size: clamp(1.125rem, 3.5vw, 1.75rem);
+  /* 最小 18px，首选 3.5%视口宽，最大 28px（副标题用） */
+  line-height: 1.4;
+}
+
+.responsive-text {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  /* 最小 16px，首选 2.5%视口宽，最大 20px（正文用） */
+}
+
+/* ★响应式 Flex 方向：手机竖排（column），电脑横排（row）—— 非常常用！ */
+.responsive-flex {
+  display: flex;
+  flex-direction: column;
+  /* 手机默认竖排（上下排列） */
+  gap: 1rem;
+  /* 间距 16px */
+}
+
+@media (min-width: 768px) {
+  .responsive-flex {
+    flex-direction: row;
+    /* 平板(≥768px)及以上横排（左右排列） */
+    gap: 1.5rem;
+    /* 电脑时间距稍大一点 */
+    align-items: stretch;
+    /* 两侧子元素高度相等 */
+  }
+}
+
+/* 安全换行：长单词、长 URL 自动断行，不撑破容器（覆盖常见所有标签双保险） */
+body,
+p,
+div,
+li,
+th,
+td,
+pre,
+blockquote {
+  word-wrap: break-word;
+  /* 老写法，兼容旧浏览器 */
+  overflow-wrap: anywhere break-word;
+  /* anywhere 优先级更高，英文数字长串也能断 */
+}
+
+/* 触摸友好：按钮和链接最小 44x44px，手机上手指好点
+   —— .btn 是通用按钮 class，a 标签覆盖所有超链接，.clickable 备用 */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn,
+a,
+.nav a,
+.clickable {
+  min-width: 44px;
+  /* 最小宽度 */
+  min-height: 44px;
+  /* 最小高度（iOS 人机交互指南要求：手指触摸区 ≥ 44×44 pt） */
+}
+
+/* ---------- 10. 显示 / 隐藏 工具类(响应式专用) ---------- */
+
+/* 手机端隐藏，电脑端显示 */
+.hide-mobile {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block !important;
+  }
+
+  .flex.hide-mobile {
+    display: flex !important;
+  }
+}
+
+/* 电脑端隐藏，手机端显示 */
+.hide-desktop {
+  display: block !important;
+}
+
+.flex.hide-desktop {
+  display: flex !important;
+}
+
+@media (min-width: 768px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* 只打印时显示 */
+.print-only {
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: block;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ---------- 11. 常用快捷类（文字对齐/定位/省略号等） ---------- */
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.font-thin {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.ellipsis-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+/* 固定在视口顶部（导航栏） */
+.fixed-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* 固定在视口底部（手机端 tabbar） */
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* 粘性定位：滚动时吸附到顶部 */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* 水平居中（块级元素或图片） */
+.mx-auto {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 区块间统一留白 */
+.section {
+  padding: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: 4rem 0;
+  }
+}
+
+/* Flex 子元素均分，带 min-width:0 防撑破布局 */
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- 12. 安全区域适配（iPhone 刘海屏/灵动岛必备） ---------- */
+/*
+ * env(safe-area-inset-*) 是 iOS11+ 提供的变量：
+ *   safe-area-inset-top    顶部安全距离（刘海/灵动岛）
+ *   safe-area-inset-bottom 底部安全距离（底部横条 Home Indicator）
+ *   safe-area-inset-left   左边安全距离（横屏时的刘海侧）
+ *   safe-area-inset-right  右边安全距离
+ * 普通安卓/没有刘海的设备，这些变量 = 0，不会破坏布局
+ */
+
+/* 固定顶部的导航栏：避开刘海 */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* 固定底部的操作栏/TabBar：避开底部横条 */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 页面左右横屏时的安全距离 */
+.safe-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 页面 body 一次性全部设置（简单项目直接给 body 加这个类） */
+.safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ---------- 13. 滚动优化 ---------- */
+
+/* 页面全局滚动顺滑 */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 自定义滚动条（PC Chrome/Edge 更美观） */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* ---------- 14. 响应式断点参考 ----------
+ * 移动端优先：先写手机默认样式，再用 min-width 往上叠加
+ *
+ *  断点名称        尺寸范围       适用设备
+ *  默认           < 768px       所有手机
+ *  sm(平板)       >= 768px      iPad 竖屏
+ *  md(小屏电脑)    >= 1024px     笔记本电脑
+ *  lg(大屏电脑)    >= 1280px     台式机显示器
+ *  xl(超大屏)     >= 1536px     2K/4K 屏
+ *
+ *  使用示例：
+ *  .card { padding: 1rem; }
+ *  @media (min-width: 768px)  { .card { padding: 1.5rem; } }
+ *  @media (min-width: 1024px) { .card { padding: 2rem; } }
+ */
