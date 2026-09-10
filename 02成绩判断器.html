@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./fonts/remixicon.css">
+    <link rel="stylesheet" href="./css/style02.css">
+</head>
+<body>
+  <div class="container">
+    <h2 class="h2yanse">成绩判断器</h2>
+    <div class="demo">
+      <p>输入分数， 判断成绩等级：</p>
+      <input type="number"  class="input" id="score" placeholder="输入0-100的分数" min="0" max="100">
+      <button class="btn btn-primary" onclick="checkScore()">判断</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function checkScore(){
+      let score=parseInt(document.getElementById("score").value);
+      let result=document.getElementById("result");
+
+      if(isNaN(score)){
+        result.textContent="请输入一个数字!"
+        result.style.color="red";
+        return;
+      }
+
+      if(score<0||score>100){
+        result.textContent="分数必须在0-100之间!"
+        result.style.color="red";
+      }else if(score>=90){
+        result.textContent="优秀 A"
+        result.style.color="green";
+      }else if(score>=80){
+        result.textContent="良好 B"
+        result.style.color="orange";
+      }else if(score>=60){
+        result.textContent="及格"
+        result.style.color="green";
+      }else{
+        result.textContent="不及格"
+        result.style.color="red";
+      }
+    }
+  </script>
+</body>
+</html>
