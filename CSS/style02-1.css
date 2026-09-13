@@ -1,0 +1,26 @@
+h1{
+  font-size: 2em;
+  color:var(--color-primary);
+  margin-top:var(--space-md);
+}
+.demo{
+  border:2px dashed var(--color-success);
+  padding:var(--space-md);
+  margin-top:var(--space-md);
+}
+p{
+  font-size:1.2rem;
+  color:var(--color-sub);
+
+}
+.demo input{
+  display:inline-block;
+  max-width:200px;
+  margin-top:var(--space-md);
+}
+#result{
+  margin-top:var(--space-md);
+  font-size:1.2rem;
+  font-weight:bold;
+  color:var(--color-primary);
+}
